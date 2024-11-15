@@ -11,8 +11,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const corsOptions = {
+  origin: "https://medium-app-seven.vercel.app", // or '*'
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // if you need to send cookies or authentication headers
+};
 // Middleware setup
-app.use(cors());
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
