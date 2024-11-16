@@ -25,12 +25,17 @@ blogRoutes.post(
       const parsed = createBlogInput.parse(body);
       const authorId = req.headers["userId"] as string;
 
+      let imgBase64: string | undefined;
+      if (req.file) {
+        imgBase64 = req.file.buffer.toString("base64");
+      }
+
       const blogData = {
         title: parsed.title,
         content: parsed.content,
         authorId: authorId,
         Published: true,
-        imgUrl: req.file ? `/images/${req.file.filename}` : undefined, // Set imgUrl conditionally
+        imgUrl: imgBase64,
       };
 
       const blog = await prisma.post.create({

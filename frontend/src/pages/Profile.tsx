@@ -11,6 +11,8 @@ import { useUser as User } from "../Context";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../Hooks";
 import Loading from "../Components/Loading";
+import Base64Image from "../Components/Base64ImageProps";
+import { defaultProfileImg } from "../../public/defaultProfileImg";
 
 interface Activeitie {
   title: string;
@@ -33,6 +35,11 @@ export const Profile = () => {
   const { userId } = useParams();
   const { user, loading } = useUser(userId as string);
   const navigate = useNavigate();
+  const base64Img = `${
+    (userId === currentUser?.id ? currentUser?.imgUrl : user?.imgUrl) ||
+    defaultProfileImg
+  }`;
+
   if (loading) {
     return <Loading />;
   }
@@ -101,14 +108,10 @@ export const Profile = () => {
           </div>
           {/* Profile details */}
           <div className="sticky top-7 flex flex-col justify-between">
-            <img
-              className="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
-              src={
-                (userId === currentUser?.id
-                  ? currentUser?.imgUrl
-                  : user?.imgUrl) || "/images/profile.jpg"
-              }
-              alt="profile-img"
+            <Base64Image
+              base64String={base64Img}
+              altText="My Base64 Image"
+              style="w-[3.5rem] h-[3.5rem] rounded-full object-cover"
             />
             <h2 className="py-2 font-bold capitalize">
               {userId === currentUser?.id ? currentUser?.name : user?.name}

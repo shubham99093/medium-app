@@ -11,6 +11,7 @@ import Comment from "../Components/Actions/Comment";
 import SavedPost from "../Components/Actions/SavedPost";
 import SharePost from "../Components/Actions/SharePost";
 import Recommended from "../Components/Recommended";
+import Base64Image from "../Components/Base64ImageProps";
 
 const Blog: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -32,6 +33,7 @@ const Blog: React.FC = () => {
     imgUrl: postImg,
     author: { name, id: userId, imgUrl: userImg },
   } = blog;
+  const base64blogpostimg = postImg;
 
   return (
     <>
@@ -40,11 +42,11 @@ const Blog: React.FC = () => {
           {title}
         </h2>
         <div className="flex items-center gap-2 py-[2rem]">
-          <img
+          <Base64Image
+            base64String={userImg as string}
             onClick={() => navigate(`/profile/${userId}`)}
-            className="w-[3rem] h-[3rem] object-cover rounded-full cursor-pointer"
-            src={userImg as string}
-            alt="user profile"
+            altText="user profile"
+            style="w-[3rem] h-[3rem] object-cover rounded-full cursor-pointer"
           />
           <div>
             <div
@@ -79,10 +81,10 @@ const Blog: React.FC = () => {
         </div>
         <div className="mt-[3rem]">
           {postImg && (
-            <img
-              className="max-w-[100%] h-auto w-full object-cover"
-              src={postImg}
-              alt="post image"
+            <Base64Image
+              base64String={base64blogpostimg}
+              altText="post image"
+              style="max-w-[100%] h-auto w-full object-cover"
             />
           )}
           <div

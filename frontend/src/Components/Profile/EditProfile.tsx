@@ -5,6 +5,8 @@ import { UserSchema } from "../../Context";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { BACKEND_URL } from "../../config";
+import Base64Image from "../../Components/Base64ImageProps";
+import { defaultProfileImg } from "../../../public/defaultProfileImg";
 
 interface EditProfileProps {
   editBlur: boolean;
@@ -20,7 +22,23 @@ interface Form {
   Image?: File | null;
 }
 
-const EditProfile = ({
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * EditProfile is a component that allows users to edit their profile information.
+ *
+ * The component contains a form with fields for name, bio, and image upload.
+ *
+ * When the user submits the form, the component sends a PUT request to the backend
+ * to update the user's profile information. If the request is successful, the
+ * component updates the user's profile information in the state and displays a
+ * success message.
+ *
+ * If the request fails, the component displays an error message.
+ *
+ * @param {EditProfileProps} props The props passed to the component.
+ * @returns {React.ReactElement} The rendered component.
+ */
+/******  18c78741-74dc-4cc0-b790-ee9e499f20ef  *******/ const EditProfile = ({
   editBlur,
   setEditBlur,
   currentUser,
@@ -83,10 +101,10 @@ const EditProfile = ({
         },
       });
 
-      setImgUrl("/images/profile.jpg");
+      setImgUrl(defaultProfileImg);
       setCurrentUser((prev) => ({
         ...prev,
-        imgUrl: "/images/profile.jpg",
+        imgUrl: defaultProfileImg,
       }));
 
       toast.success("Image removed successfully");
@@ -101,9 +119,9 @@ const EditProfile = ({
       setForm({
         name: currentUser.name || "",
         bio: currentUser.bio || "",
-        userImg: currentUser.imgUrl || "/images/profile.jpg",
+        userImg: currentUser.imgUrl || defaultProfileImg,
       });
-      setImgUrl(currentUser.imgUrl || "/images/profile.jpg");
+      setImgUrl(currentUser.imgUrl || defaultProfileImg);
     } else {
       setForm({ name: "", bio: "", userImg: "" });
     }
@@ -153,6 +171,8 @@ const EditProfile = ({
     }
   };
 
+  const base64Img = imgUrl ? imgUrl : form.userImg;
+
   return (
     <BlurEffect blur={editBlur} setBlur={setEditBlur}>
       <div className="rounded-md center w-[95%] md:w-[45rem] bg-white mx-auto shadows my-[1rem] z-20 mb-[3rem] p-[2rem]">
@@ -168,10 +188,10 @@ const EditProfile = ({
           <p className="pb-3 text-sm text-gray-500">Photo</p>
           <div className="flex gap-[2rem]">
             <div className="w-[5rem] h-[5rem]">
-              <img
-                className="min-h-[5rem] min-w-[5rem] rounded-full object-cover border border-gray-400"
-                src={imgUrl ? imgUrl : form.userImg}
-                alt="profile-img"
+              <Base64Image
+                base64String={base64Img}
+                altText="profile-img"
+                style="min-h-[5rem] min-w-[5rem] rounded-full object-cover border border-gray-400"
               />
               <input
                 onChange={handleImageChange}

@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { Router, Response } from "express";
 import { userMiddleware, upload } from "../middleware";
 import { z } from "zod";
+import { defaultProfileImg } from "../helper";
 
 // Configuration
 const userRoutes = Router();
@@ -140,16 +141,21 @@ userRoutes.put(
   async (req, res) => {
     try {
       if (req.file) {
+        const imgBase64: string | undefined =
+          req.file.buffer.toString("base64");
+
         const userId = req.headers["userId"] as string;
         const user = await prisma.user.update({
           where: { id: userId },
-          data: { imgUrl: `/images/${req.file.filename}` },
+          data: {
+            imgUrl: imgBase64,
+          },
         });
         if (!user) {
           return handleError(res, HTTP_STATUS.NOT_FOUND, "Unauthorized");
         }
         return res.json({
-          url: `/images/${req.file.filename}`,
+          url: `${user.imgUrl}`,
           message: "File is uploaded",
         });
       }
@@ -169,7 +175,7 @@ userRoutes.delete("/removeImage", userMiddleware, async (req, res) => {
     const userId = req.headers["userId"] as string;
     const user = await prisma.user.update({
       where: { id: userId },
-      data: { imgUrl: "/images/profile.jpg" },
+      data: { imgUrl: defaultProfileImg },
     });
     if (!user) {
       return handleError(res, HTTP_STATUS.NOT_FOUND, "Unauthorized");

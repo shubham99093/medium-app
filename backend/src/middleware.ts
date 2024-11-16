@@ -53,14 +53,16 @@ export const blogMiddleware = verifyToken;
 export const userMiddleware = verifyToken;
 
 // Multer configuration for uploading images
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../../frontend/public/images"));
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, path.join(__dirname, "../../frontend/public/images"));
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+//   },
+// });
+
+const storage = multer.memoryStorage();
 
 export const upload = multer({
   storage: storage,

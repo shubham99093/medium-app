@@ -12,6 +12,8 @@ import { CiSearch } from "react-icons/ci";
 import { useUser } from "../../Context";
 import { BACKEND_URL } from "../../config";
 import Loading from "../Loading";
+import Base64Image from "../Base64ImageProps";
+import { defaultProfileImg } from "../../../public/defaultProfileImg";
 
 const AppBar = () => {
   const [blur, setBlur] = useState(false);
@@ -21,11 +23,15 @@ const AppBar = () => {
   const { currentUser, setPublish, updateData, title, content } = useUser(); // Replaced description with content
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const base64Img = `${
+    currentUser?.imgUrl ? currentUser?.imgUrl : defaultProfileImg
+  }`;
 
   const editPath = pathname.split("/")[1] === "editPost";
   if (loading) {
     return <Loading />;
   }
+
   const handleEdit = async () => {
     try {
       setLoading(true);
@@ -106,10 +112,10 @@ const AppBar = () => {
             }}
             className="flex items-center relative "
           >
-            <img
-              className="w-[2.3rem] h-[2.3rem] cursor-pointer object-cover rounded-full "
-              src={currentUser?.imgUrl ? currentUser?.imgUrl : "/profile.jpg"}
-              alt="profile-img"
+            <Base64Image
+              base64String={base64Img}
+              altText="My Base64 Image"
+              style="w-[2.3rem] h-[2.3rem] cursor-pointer object-cover rounded-full"
             />
             <span className="text-gray-500 cursor-pointer ">
               <MdKeyboardArrowDown />

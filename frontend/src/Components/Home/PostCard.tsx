@@ -5,6 +5,7 @@ import { useUser } from "../../Context";
 import moment from "moment";
 import SavedPost from "../Actions/SavedPost";
 import Actions from "../Actions/Actions";
+import Base64Image from "../Base64ImageProps";
 
 interface PostCardProps {
   post: Blog;
@@ -41,10 +42,10 @@ const PostCard = ({ post }: PostCardProps) => {
         </div>
         {postImg && (
           <div className="flex-[1]">
-            <img
-              src={postImg}
-              alt={`Image for the post: ${title}`} // Improved alt text
-              className="w-[53rem] h-[8rem] object-cover"
+            <Base64Image
+              base64String={postImg}
+              altText={`Image for the post: ${title}`}
+              style="w-[53rem] h-[8rem] object-cover"
             />
           </div>
         )}
